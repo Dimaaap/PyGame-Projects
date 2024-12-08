@@ -1,28 +1,23 @@
-import pygame
-
 from config import *
-from services import (handle_yellow_key_pressed, handle_red_key_pressed, handle_create_bullet,
-                      valid_bullets_count)
+from services import (handle_yellow_key_pressed, handle_red_key_pressed, handle_bullets)
+from spaceship import Spaceship
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption("First Game!")
 
 
-def draw_window(red, yellow):
+def draw_window(red: Spaceship, yellow: Spaceship):
     WIN.fill(WHITE_COLOR)
     pygame.draw.rect(WIN, BLACK_COLOR, BORDER)
-    WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
-    WIN.blit(RED_SPACESHIP, (red.x, red.y))
+    WIN.blit(YELLOW_SPACESHIP, (yellow.get_x(), yellow.get_y()))
+    WIN.blit(RED_SPACESHIP, (red.get_x(), red.get_y()))
     pygame.display.update()
 
 
 def main():
-    red = pygame.Rect(RED_SPACESHIP_X, RED_SPACESHIP_Y, *RED_SPACESHIP_RESIZE_SIZE)
-    yellow = pygame.Rect(YELLOW_SPACESHIP_X, YELLOW_SPACESHIP_Y, *YELLOW_SPACESHIP_RESIZE_SIZE)
-
-    red_spaceship_bullets = []
-    yellow_spaceship_bullets = []
+    red = Spaceship(RED_SPACESHIP_X, RED_SPACESHIP_Y, *RED_SPACESHIP_RESIZE_SIZE)
+    yellow = Spaceship(YELLOW_SPACESHIP_X, YELLOW_SPACESHIP_Y, *YELLOW_SPACESHIP_RESIZE_SIZE)
 
     clock = pygame.time.Clock()
 
@@ -34,18 +29,16 @@ def main():
                 run = False
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LCTRL and valid_bullets_count(yellow_spaceship_bullets):
-                    bullet = handle_create_bullet(yellow)
-                    yellow_spaceship_bullets.append(bullet)
+                if event.key == pygame.K_LCTRL and yellow.valid_bullets_count():
+                    yellow.handle_create_bullet()
 
-                if event.type == pygame.K_RCTRL and valid_bullets_count(red_spaceship_bullets):
-                    bullet = handle_create_bullet(red, invert=True)
-                    red_spaceship_bullets.append(bullet)
+                if event.key == pygame.K_RCTRL and red.valid_bullets_count():
+                    red.handle_create_bullet(invert=True)
 
-        print(red_spaceship_bullets, yellow_spaceship_bullets)
         keys_pressed = pygame.key.get_pressed()
         handle_yellow_key_pressed(keys_pressed, yellow)
         handle_red_key_pressed(keys_pressed, red)
+        handle_bullets(yellow.get_spaceship_bullets(), red.get_spaceship_bullets(), yellow, red)
         draw_window(red, yellow)
     pygame.quit()
 

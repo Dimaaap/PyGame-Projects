@@ -1,5 +1,6 @@
 from config import *
 from custom_errors import *
+from spaceship import Spaceship
 
 
 class SpaceshipMoving:
@@ -8,35 +9,30 @@ class SpaceshipMoving:
         self.__yellow = yellow
         self.__red = red
 
-    def moving_left(self, spaceship):
-        if spaceship == "yellow":
-            self.__yellow.x -= VELOCITY
-        elif spaceship == "red":
-            self.__red.x -= VELOCITY
+    def moving_left(self, spaceship: Spaceship):
+        if isinstance(spaceship, Spaceship):
+            new_coord = spaceship.get_x() - VELOCITY
+            spaceship.set_x(new_coord)
         else:
             raise InvalidSpaceshipException("Wrong type of spaceship")
 
-    def moving_right(self, spaceship):
-        if spaceship == "yellow":
-            self.__yellow.x += VELOCITY
-        elif spaceship == "red":
-            self.__red.x += VELOCITY
+    def moving_right(self, spaceship: Spaceship):
+        if isinstance(spaceship, Spaceship):
+            new_coord = spaceship.get_x() + VELOCITY
+            spaceship.set_x(new_coord)
         else:
             raise InvalidSpaceshipException("Wrong type of spaceship")
 
-    def moving_top(self, spaceship):
-        if spaceship == "yellow":
-            self.__yellow.y -= VELOCITY
-        elif spaceship == "red":
-            self.__red.y -= VELOCITY
+    def moving_top(self, spaceship: Spaceship):
+        if isinstance(spaceship, Spaceship):
+            new_coord = spaceship.get_y() - VELOCITY
+            spaceship.set_y(new_coord)
         else:
             raise InvalidSpaceshipException("Wrong type of spaceship")
 
     def moving_bottom(self, spaceship):
-        if spaceship == "yellow":
-            self.__yellow.y += VELOCITY
-        elif spaceship == "red":
-            self.__red.y += VELOCITY
+        if isinstance(spaceship, Spaceship):
+            new_coord = spaceship.get_y() + VELOCITY
+            spaceship.set_y(new_coord)
         else:
             raise InvalidSpaceshipException("Wrong type of spaceship")
-
